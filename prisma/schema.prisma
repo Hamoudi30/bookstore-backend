@@ -1,0 +1,44 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Store {
+  id         Int         @id @default(autoincrement())
+  name       String
+  address    String
+  storeBooks StoreBook[]
+
+  @@unique([name, address])
+}
+
+model Author {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  books Book[]
+}
+
+model Book {
+  id         Int         @id @default(autoincrement())
+  name       String
+  pages      Int
+  authorId   Int
+  author     Author      @relation(fields: [authorId], references: [id])
+  storeBooks StoreBook[]
+}
+
+model StoreBook {
+  storeId Int
+  bookId  Int
+  price   Float
+  copies  Int     @default(1)
+  soldOut Boolean @default(false)
+  store   Store   @relation(fields: [storeId], references: [id])
+  book    Book    @relation(fields: [bookId], references: [id])
+
+  @@id([storeId, bookId])
+}

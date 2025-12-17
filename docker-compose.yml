@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: bookstore_app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://root:zamalek@host.docker.internal:3306/book_store_db
+      NODE_ENV: development
+    volumes:
+      - .:/app
